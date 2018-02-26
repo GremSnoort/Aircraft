@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     , l_airspeed_on_descent(new QLabel("5. Airspeed on descent: ", this))
     , l_descent_rate(new QLabel("6. Descent rate: ", this))
     , l_wind_from(new QLabel("7. Wind from: ", this))
+    , l_Wt(new QLabel("W(t) = ", this))
 
     , data_heading(new QLineEdit(this))
     , data_airspeed_on_ascent(new QLineEdit(this))
@@ -17,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     , data_airspeed_on_descent(new QLineEdit(this))
     , data_descent_rate(new QLineEdit(this))
     , data_wind_from(new QLineEdit(this))
+    , data_Wt(new QLineEdit(this))
 
     , calculate_res(new QPushButton("Calculate", this))
 
@@ -34,9 +36,42 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){}
 
+double eval(const Expression& e) {
+    switch (e.args.size()) {
+    case 2: {
+        auto a = eval(e.args[0]);
+        auto b = eval(e.args[1]);
+        if (e.token == "+") return a + b;
+        if (e.token == "-") return a - b;
+        if (e.token == "*") return a * b;
+        if (e.token == "/") return a / b;
+        if (e.token == "**") return pow(a, b);
+        if (e.token == "mod") return (int)a % (int)b;
+        throw std::runtime_error("Unknown binary operator");
+    }
+
+    case 1: {
+        auto a = eval(e.args[0]);
+        if (e.token == "+") return +a;
+        if (e.token == "-") return -a;
+        if (e.token == "abs") return abs(a);
+        if (e.token == "sin") return sin(a);
+        if (e.token == "cos") return cos(a);
+        throw std::runtime_error("Unknown unary operator");
+    }
+
+    case 0:
+        return strtod(e.token.c_str(), nullptr);
+    }
+
+    throw std::runtime_error("Unknown expression type");
+}
+
+
 void MainWindow::CalculateResult()
 {
     SetParameters();
+
     double UP_North_South = airspeed_on_ascent * rise_time * cos(heading*M_PI/180);
     double UP_East_West = airspeed_on_ascent * rise_time * sin(heading*M_PI/180);
     double fall_time = 0.0f;
@@ -50,6 +85,9 @@ void MainWindow::CalculateResult()
     l_fall_time.data()->setText(QString(tr("Fall time: %1").arg(fall_time)));
     l_DOWN_North_South.data()->setText(QString(tr("DOWN North-South: %1").arg(DOWN_North_South)));
     l_DOWN_East_West.data()->setText(QString(tr("DOWN East-West: %1").arg(DOWN_East_West)));
+
+    Parser p(wind_function.toLocal8Bit().data());
+    auto result = eval(p.parse());
 }
 
 void MainWindow::SetParameters()
@@ -61,6 +99,7 @@ void MainWindow::SetParameters()
     airspeed_on_descent = data_airspeed_on_descent.data()->text().toFloat();
     descent_rate = data_descent_rate.data()->text().toFloat();
     wind_to = data_wind_from.data()->text().toFloat() + 180;
+    wind_function = data_Wt.data()->text();
 }
 
 void MainWindow::CreateLayout()
@@ -93,13 +132,16 @@ void MainWindow::CreateLayout()
     layout->addWidget(l_wind_from.data(), 6, 0);
     layout->addWidget(data_wind_from.data(), 6, 1);
 
-    layout->addWidget(calculate_res.data(), 7, 1);
+    layout->addWidget(l_Wt.data(), 7, 0);
+    layout->addWidget(data_Wt.data(), 7, 1);
 
-    layout->addWidget(l_UP_North_South.data(), 8, 1);
-    layout->addWidget(l_UP_East_West.data(), 9, 1);
-    layout->addWidget(l_fall_time.data(), 10, 1);
-    layout->addWidget(l_DOWN_North_South.data(), 11, 1);
-    layout->addWidget(l_DOWN_East_West.data(), 12, 1);
+    layout->addWidget(calculate_res.data(), 8, 1);
+
+    layout->addWidget(l_UP_North_South.data(), 9, 1);
+    layout->addWidget(l_UP_East_West.data(), 10, 1);
+    layout->addWidget(l_fall_time.data(), 11, 1);
+    layout->addWidget(l_DOWN_North_South.data(), 12, 1);
+    layout->addWidget(l_DOWN_East_West.data(), 13, 1);
 
     layout->addWidget(spacer);
 

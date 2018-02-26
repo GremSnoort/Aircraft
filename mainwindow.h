@@ -10,6 +10,8 @@
 #include <QValidator>
 #include <QtMath>
 
+#include "parser.h"
+
 class MainWindow : public QWidget
 {
     Q_OBJECT
@@ -29,6 +31,7 @@ public:
     float airspeed_on_descent = 0.0f;
     float descent_rate = 0.0f;
     float wind_to = 0.0f;
+    QString wind_function = "";
 
     QScopedPointer<QLabel> l_heading;//1. направление полёта
     QScopedPointer<QLabel> l_airspeed_on_ascent;//2. горизонтальная компонента вектора скорости при взлёте
@@ -37,6 +40,7 @@ public:
     QScopedPointer<QLabel> l_airspeed_on_descent;//5. горизонтальная компонента вектора скорости при падении
     QScopedPointer<QLabel> l_descent_rate;//6. вертикальная компонента вектора скорости при падении
     QScopedPointer<QLabel> l_wind_from;//7. направление, откуда дует ветер
+    QScopedPointer<QLabel> l_Wt;//8. функция ветра
 
     QScopedPointer<QLineEdit> data_heading;//1
     QScopedPointer<QLineEdit> data_airspeed_on_ascent;//2
@@ -45,6 +49,7 @@ public:
     QScopedPointer<QLineEdit> data_airspeed_on_descent;//5
     QScopedPointer<QLineEdit> data_descent_rate;//6
     QScopedPointer<QLineEdit> data_wind_from;//7
+    QScopedPointer<QLineEdit> data_Wt;//8
 
     QScopedPointer<QPushButton> calculate_res;
 

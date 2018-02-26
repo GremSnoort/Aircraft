@@ -8,6 +8,8 @@ class Integral
 public:
     Integral();
 
+    static double Function(double t);
+    static double CalculateIntegral(double a, double b);
 
 
 };

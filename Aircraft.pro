@@ -26,8 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    integral.cpp
+    integral.cpp \
+    parser.cpp
 
 HEADERS += \
         mainwindow.h \
-    integral.h
+    integral.h \
+    parser.h
