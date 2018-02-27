@@ -1,72 +1,18 @@
 #include "mainwindow.h"
+#include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
-    , l_heading(new QLabel("1. Heading: ", this))
-    , l_airspeed_on_ascent(new QLabel("2. Airspeed on ascent: ", this))
-    , l_ascent_rate(new QLabel("3. Ascent rate: ", this))
-    , l_rise_time(new QLabel("4. Rise time: ", this))
-    , l_airspeed_on_descent(new QLabel("5. Airspeed on descent: ", this))
-    , l_descent_rate(new QLabel("6. Descent rate: ", this))
-    , l_wind_from(new QLabel("7. Wind from: ", this))
-    , l_Wt(new QLabel("W(t) = ", this))
-
-    , data_heading(new QLineEdit(this))
-    , data_airspeed_on_ascent(new QLineEdit(this))
-    , data_ascent_rate(new QLineEdit(this))
-    , data_rise_time(new QLineEdit(this))
-    , data_airspeed_on_descent(new QLineEdit(this))
-    , data_descent_rate(new QLineEdit(this))
-    , data_wind_from(new QLineEdit(this))
-    , data_Wt(new QLineEdit(this))
-
-    , calculate_res(new QPushButton("Calculate", this))
-
-    , l_UP_North_South(new QLabel("UP North-South: ", this))
-    , l_UP_East_West(new QLabel("UP East-West: ", this))
-    , l_fall_time(new QLabel("Fall time: ", this))
-    , l_DOWN_North_South(new QLabel("DOWN North-South: ", this))
-    , l_DOWN_East_West(new QLabel("DOWN East-West: ", this))
+    , input_(new InputWidget(this))
+    , output_(new OutputWidget(this))
+    , calculate_res(new QPushButton("Calculate", this))    
 {    
-    setFixedSize(320, 400);
+    setFixedSize(400, 500);
     CreateLayout();
-
     connect(calculate_res.data(), SIGNAL(clicked(bool)), this, SLOT(CalculateResult()));
 }
 
 MainWindow::~MainWindow(){}
-
-double eval(const Expression& e) {
-    switch (e.args.size()) {
-    case 2: {
-        auto a = eval(e.args[0]);
-        auto b = eval(e.args[1]);
-        if (e.token == "+") return a + b;
-        if (e.token == "-") return a - b;
-        if (e.token == "*") return a * b;
-        if (e.token == "/") return a / b;
-        if (e.token == "**") return pow(a, b);
-        if (e.token == "mod") return (int)a % (int)b;
-        throw std::runtime_error("Unknown binary operator");
-    }
-
-    case 1: {
-        auto a = eval(e.args[0]);
-        if (e.token == "+") return +a;
-        if (e.token == "-") return -a;
-        if (e.token == "abs") return abs(a);
-        if (e.token == "sin") return sin(a);
-        if (e.token == "cos") return cos(a);
-        throw std::runtime_error("Unknown unary operator");
-    }
-
-    case 0:
-        return strtod(e.token.c_str(), nullptr);
-    }
-
-    throw std::runtime_error("Unknown expression type");
-}
-
 
 void MainWindow::CalculateResult()
 {
@@ -80,79 +26,44 @@ void MainWindow::CalculateResult()
     double DOWN_North_South = airspeed_on_descent * fall_time * cos(heading*M_PI/180);
     double DOWN_East_West = airspeed_on_descent * fall_time * sin(heading*M_PI/180);
 
-    l_UP_North_South.data()->setText(QString(tr("UP North-South: %1").arg(UP_North_South)));
-    l_UP_East_West.data()->setText(QString(tr("UP East-West: %1").arg(UP_East_West)));
-    l_fall_time.data()->setText(QString(tr("Fall time: %1").arg(fall_time)));
-    l_DOWN_North_South.data()->setText(QString(tr("DOWN North-South: %1").arg(DOWN_North_South)));
-    l_DOWN_East_West.data()->setText(QString(tr("DOWN East-West: %1").arg(DOWN_East_West)));
+    double INTEGRAL = Integral::CalculateIntegral(rise_time, rise_time+fall_time);
+    double WIND_North_South = INTEGRAL * cos(wind_to*M_PI/180);
+    double WIND_East_West = INTEGRAL * sin(wind_to*M_PI/180);
 
-    Parser p(wind_function.toLocal8Bit().data());
-    auto result = eval(p.parse());
+    output_.data()->l_UP_North_South.data()->setText(QString(tr("North-South UP: %1").arg(UP_North_South)));
+    output_.data()->l_UP_East_West.data()->setText(QString(tr("East-West UP: %1").arg(UP_East_West)));
+    output_.data()->l_fall_time.data()->setText(QString(tr("Fall time: %1").arg(fall_time)));
+    output_.data()->l_DOWN_North_South.data()->setText(QString(tr("North-South DOWN: %1").arg(DOWN_North_South)));
+    output_.data()->l_DOWN_East_West.data()->setText(QString(tr("East-West DOWN: %1").arg(DOWN_East_West)));
+
+    output_.data()->l_Integral.data()->setText(QString(tr("Integral: %1").arg(INTEGRAL)));
+    output_.data()->l_WIND_North_South.data()->setText(QString(tr("North-South WIND: %1").arg(WIND_North_South)));
+    output_.data()->l_WIND_East_West.data()->setText(QString(tr("East-West WIND: %1").arg(WIND_East_West)));
 }
 
 void MainWindow::SetParameters()
 {
-    heading = data_heading.data()->text().toFloat();
-    airspeed_on_ascent = data_airspeed_on_ascent.data()->text().toFloat();
-    ascent_rate = data_ascent_rate.data()->text().toFloat();
-    rise_time = data_rise_time.data()->text().toFloat();
-    airspeed_on_descent = data_airspeed_on_descent.data()->text().toFloat();
-    descent_rate = data_descent_rate.data()->text().toFloat();
-    wind_to = data_wind_from.data()->text().toFloat() + 180;
-    wind_function = data_Wt.data()->text();
+    heading = input_.data()->d_heading.data()->text().toFloat();
+    airspeed_on_ascent = input_.data()->d_airspeed_on_ascent.data()->text().toFloat();
+    ascent_rate = input_.data()->d_ascent_rate.data()->text().toFloat();
+    rise_time = input_.data()->d_rise_time.data()->text().toFloat();
+    airspeed_on_descent = input_.data()->d_airspeed_on_descent.data()->text().toFloat();
+    descent_rate = input_.data()->d_descent_rate.data()->text().toFloat();
+    wind_to = input_.data()->d_wind_from.data()->text().toFloat() + 180;
+    Integral::wind_function = input_.data()->d_Wt.data()->text();
 }
 
 void MainWindow::CreateLayout()
 {
-    QGridLayout* layout = new QGridLayout(this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
     QWidget* spacer = new QWidget;
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    layout->setColumnMinimumWidth(1, 50);
-    layout->setColumnStretch(1, 1);
-
-    layout->addWidget(l_heading.data(), 0, 0);
-    layout->addWidget(data_heading.data(), 0, 1);
-
-    layout->addWidget(l_airspeed_on_ascent.data(), 1, 0);
-    layout->addWidget(data_airspeed_on_ascent.data(), 1, 1);
-
-    layout->addWidget(l_ascent_rate.data(), 2, 0);
-    layout->addWidget(data_ascent_rate.data(), 2, 1);
-
-    layout->addWidget(l_rise_time.data(), 3, 0);
-    layout->addWidget(data_rise_time.data(), 3, 1);
-
-    layout->addWidget(l_airspeed_on_descent.data(), 4, 0);
-    layout->addWidget(data_airspeed_on_descent.data(), 4, 1);
-
-    layout->addWidget(l_descent_rate.data(), 5, 0);
-    layout->addWidget(data_descent_rate.data(), 5, 1);
-
-    layout->addWidget(l_wind_from.data(), 6, 0);
-    layout->addWidget(data_wind_from.data(), 6, 1);
-
-    layout->addWidget(l_Wt.data(), 7, 0);
-    layout->addWidget(data_Wt.data(), 7, 1);
-
-    layout->addWidget(calculate_res.data(), 8, 1);
-
-    layout->addWidget(l_UP_North_South.data(), 9, 1);
-    layout->addWidget(l_UP_East_West.data(), 10, 1);
-    layout->addWidget(l_fall_time.data(), 11, 1);
-    layout->addWidget(l_DOWN_North_South.data(), 12, 1);
-    layout->addWidget(l_DOWN_East_West.data(), 13, 1);
+    layout->addWidget(input_.data());
+    layout->addWidget(calculate_res.data());
+    layout->addWidget(output_.data());
 
     layout->addWidget(spacer);
 
     setLayout(layout);
-
-    QValidator* validator = new QDoubleValidator(this);
-    data_heading.data()->setValidator(validator);
-    data_airspeed_on_ascent.data()->setValidator(validator);
-    data_ascent_rate.data()->setValidator(validator);
-    data_rise_time.data()->setValidator(validator);
-    data_airspeed_on_descent.data()->setValidator(validator);
-    data_descent_rate.data()->setValidator(validator);
-    data_wind_from.data()->setValidator(validator);
 }

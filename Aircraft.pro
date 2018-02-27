@@ -27,9 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     integral.cpp \
-    parser.cpp
+    inputwidget.cpp \
+    outputwidget.cpp \    
+    tinyexpr-master/tinyexpr.c
+
 
 HEADERS += \
         mainwindow.h \
     integral.h \
-    parser.h
+    inputwidget.h \
+    outputwidget.h \    
+    tinyexpr-master/tinyexpr.h
+
