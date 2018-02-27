@@ -16,7 +16,8 @@ long double Integral::Function(long double t)
                 + Integral::wind_function.mid(Integral::wind_function.indexOf('t', 0)+1);
     }
 
-    return te_interp(wf.toLocal8Bit().data(), 0);
+    return te_interp(wf.toStdString().c_str(), 0);
+                     //toLocal8Bit().data(), 0);
 }
 
 long double Integral::CalculateIntegral(long double a, long double b)
@@ -37,7 +38,7 @@ long double Integral::CalculateIntegral(long double a, long double b)
     // вычисляем интеграл по формуле трапеций
     integral = h * (Function(a) + Function(b)) / 2.0;
     for(i = 1; i <= n-1; i++)
-    integral = integral + h * Function(a + h * i);
+    integral += h * Function(a + h * i);
     //cout << "I2 = " << Integral << "\n";
 
     // вычисляем интеграл по формуле центральных прямугольников

@@ -10,6 +10,8 @@ OutputWidget::OutputWidget(QWidget *parent)
     , l_Integral(new QLabel("Integral: ", this))
     , l_WIND_North_South(new QLabel("North-South WIND: -", this))
     , l_WIND_East_West(new QLabel("East-West WIND: -", this))
+    , l_FINAL_North_South(new QLabel("North-South FINAL: -", this))
+    , l_FINAL_East_West(new QLabel("East-West FINAL: -", this))
 {
     CreateLayout();
 }
@@ -33,6 +35,10 @@ void OutputWidget::CreateLayout()
     layout->addWidget(l_fall_time.data());    
 
     layout->addWidget(l_Integral.data());
+
+    layout->addWidget(new QWidget());
+    layout->addWidget(l_FINAL_North_South.data());
+    layout->addWidget(l_FINAL_East_West.data());
 
     layout->addWidget(spacer);
 

@@ -39,6 +39,9 @@ void MainWindow::CalculateResult()
     output_.data()->l_Integral.data()->setText(QString(tr("Integral: %1").arg(INTEGRAL)));
     output_.data()->l_WIND_North_South.data()->setText(QString(tr("North-South WIND: %1").arg(WIND_North_South)));
     output_.data()->l_WIND_East_West.data()->setText(QString(tr("East-West WIND: %1").arg(WIND_East_West)));
+
+    output_.data()->l_FINAL_North_South.data()->setText(QString(tr("North-South FINAL: %1").arg(UP_North_South + DOWN_North_South+ WIND_North_South)));
+    output_.data()->l_FINAL_East_West.data()->setText(QString(tr("East-West FINAL: %1").arg(UP_East_West + DOWN_East_West + WIND_East_West)));
 }
 
 void MainWindow::SetParameters()

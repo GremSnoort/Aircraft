@@ -21,10 +21,11 @@ public:
     QScopedPointer<QLabel> l_fall_time;
     QScopedPointer<QLabel> l_DOWN_North_South;
     QScopedPointer<QLabel> l_DOWN_East_West;
-
     QScopedPointer<QLabel> l_Integral;
     QScopedPointer<QLabel> l_WIND_North_South;
     QScopedPointer<QLabel> l_WIND_East_West;
+    QScopedPointer<QLabel> l_FINAL_North_South;
+    QScopedPointer<QLabel> l_FINAL_East_West;
 
 signals:
 
