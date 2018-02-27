@@ -17,14 +17,13 @@ long double Integral::Function(long double t)
     }
 
     return te_interp(wf.toStdString().c_str(), 0);
-                     //toLocal8Bit().data(), 0);
 }
 
 long double Integral::CalculateIntegral(long double a, long double b)
 {
     int i; // счётчик
     long double integral; // здесь будет интеграл
-    long double h = 0.001;// задаём шаг интегрирования
+    long double h = 0.1;// задаём шаг интегрирования!!!
     long double n; // задаём число разбиений n
     n = (b - a) / h;
 

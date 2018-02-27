@@ -40,8 +40,25 @@ void MainWindow::CalculateResult()
     output_.data()->l_WIND_North_South.data()->setText(QString(tr("North-South WIND: %1").arg(WIND_North_South)));
     output_.data()->l_WIND_East_West.data()->setText(QString(tr("East-West WIND: %1").arg(WIND_East_West)));
 
-    output_.data()->l_FINAL_North_South.data()->setText(QString(tr("North-South FINAL: %1").arg(UP_North_South + DOWN_North_South+ WIND_North_South)));
-    output_.data()->l_FINAL_East_West.data()->setText(QString(tr("East-West FINAL: %1").arg(UP_East_West + DOWN_East_West + WIND_East_West)));
+    double FINAL_NS = UP_North_South + DOWN_North_South+ WIND_North_South;
+    double FINAL_EW = UP_East_West + DOWN_East_West + WIND_East_West;
+
+    output_.data()->l_FINAL_North_South.data()->setText(QString(tr("North-South FINAL: %1").arg(FINAL_NS)));
+    output_.data()->l_FINAL_East_West.data()->setText(QString(tr("East-West FINAL: %1").arg(FINAL_EW)));
+
+    output_.data()->l_ANSWER_value.data()->setText(QString(tr("ANSWER: %1").arg(sqrt(FINAL_NS*FINAL_NS + FINAL_EW*FINAL_EW))));
+
+    double destination = 0.0f;
+    if(FINAL_NS>0 && FINAL_EW>=0)//I четверть
+        destination = abs(atan(FINAL_EW/FINAL_NS))* 180.0 / M_PI;
+    if(FINAL_NS>=0 && FINAL_EW<0)//II четверть
+        destination = 270 + abs((atan(FINAL_NS/FINAL_EW))* 180.0 / M_PI);
+    if(FINAL_NS<0 && FINAL_EW<=0)//III четверть
+        destination = 180 + abs((atan(FINAL_EW/FINAL_NS))* 180.0 / M_PI);
+    if(FINAL_NS<=0 && FINAL_EW>0)//IV четверть
+        destination = 90 + abs((atan(FINAL_NS/FINAL_EW))* 180.0 / M_PI);
+
+    output_.data()->l_ANSWER_destination.data()->setText(QString(tr("In Destination: %1 grad").arg(destination)));
 }
 
 void MainWindow::SetParameters()

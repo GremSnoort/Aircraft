@@ -6,7 +6,7 @@
 #include <QScopedPointer>
 #include <QLabel>
 #include <QLineEdit>
-#include <QVBoxLayout>
+#include <QGridLayout>
 
 class OutputWidget : public QWidget
 {
@@ -26,6 +26,8 @@ public:
     QScopedPointer<QLabel> l_WIND_East_West;
     QScopedPointer<QLabel> l_FINAL_North_South;
     QScopedPointer<QLabel> l_FINAL_East_West;
+    QScopedPointer<QLabel> l_ANSWER_value;
+    QScopedPointer<QLabel> l_ANSWER_destination;
 
 signals:
 
