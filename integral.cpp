@@ -31,22 +31,21 @@ long double Integral::CalculateIntegral(long double a, long double b)
     // вычисляем интеграл по формуле центральных прямугольников
     /*integral = 0.0;
     for(i = 1; i <= n; i++)
-    integral = integral + h * Integral::Function(a + h * (i - 0.5));
+        integral = integral + h * Integral::Function(a + h * (i - 0.5));
     //cout << "I1 = " << Integral << "\n";*/
-
 
     // вычисляем интеграл по формуле трапеций
     integral = h * (Function(a) + Function(b)) / 2.0;
     for(i = 1; i <= n-1; i++)
-    integral += h * Function(a + h * i);
+        integral += h * Function(a + h * i);
     //cout << "I2 = " << Integral << "\n";
 
     // вычисляем интеграл по формуле центральных прямугольников
     /*integral = h * (Function(a) + Function(b)) / 6.0;
     for(i = 1; i <= n; i++)
-    integral = integral + 4.0 / 6.0 * h * Function(a + h * (i - 0.5));
+        integral = integral + 4.0 / 6.0 * h * Function(a + h * (i - 0.5));
     for(i = 1; i <= n-1; i++)
-    integral = integral + 2.0 / 6.0 * h * Function(a + h * i);*/
+        integral = integral + 2.0 / 6.0 * h * Function(a + h * i);*/
     //cout << "I3 = " << Integral << "\n";
     return integral;
 }
