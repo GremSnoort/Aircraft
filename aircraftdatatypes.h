@@ -15,6 +15,7 @@ struct d_in
     double descent_rate = 0.0f;
     double wind_to = 0.0f;
     QString wind_function = "";
+    double step = 0.0f;
 };
 Q_DECLARE_METATYPE(d_in)
 

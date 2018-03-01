@@ -7,10 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
     , output_(new OutputWidget(this))
     , calculate_res(new QPushButton("Calculate", this))    
 {    
-    setFixedSize(400, 580);
+    setFixedSize(400, 590);
     setWindowIcon(QIcon(QCoreApplication::applicationDirPath()+"/Pics/kompass.jpeg"));
     CreateLayout();
-    connect(calculate_res.data(), SIGNAL(clicked(bool)), this, SLOT(CalculateResult()));
+    connect(calculate_res.data(), &QPushButton::released, this, &MainWindow::CalculateResult);
 }
 
 MainWindow::~MainWindow(){}
@@ -28,7 +28,11 @@ void MainWindow::CalculateResult()
     out.down_north_south = in.airspeed_on_descent * out.fall_time * cos(in.heading*M_PI/180);
     out.down_east_west = in.airspeed_on_descent * out.fall_time * sin(in.heading*M_PI/180);
 
-    out.integral = Integral::CalculateIntegral(in.rise_time, in.rise_time + out.fall_time, input_.data()->b_ask_for_integral_var.data()->currentIndex(), in.wind_function);
+    out.integral = Integral::CalculateIntegral(in.rise_time
+                                               , in.rise_time + out.fall_time
+                                               , input_.data()->b_ask_for_integral_var.data()->currentIndex()
+                                               , in.step
+                                               , in.wind_function);
 
     out.wind_north_south = out.integral * cos(in.wind_to*M_PI/180);
     out.wind_east_west = out.integral * sin(in.wind_to*M_PI/180);

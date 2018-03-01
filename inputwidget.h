@@ -9,6 +9,7 @@
 #include <QGridLayout>
 #include <QValidator>
 #include <QComboBox>
+#include <QSlider>
 
 #include "aircraftdatatypes.h"
 
@@ -29,7 +30,9 @@ public:
     QScopedPointer<QLabel> l_descent_rate;//6. вертикальная компонента вектора скорости при падении
     QScopedPointer<QLabel> l_wind_from;//7. направление, откуда дует ветер
     QScopedPointer<QLabel> l_Wt;//8. функция ветра
+
     QScopedPointer<QLabel> l_ask_for_integral_var;
+    QScopedPointer<QLabel> l_step;
 
     QScopedPointer<QLineEdit> d_heading;//1
     QScopedPointer<QLineEdit> d_airspeed_on_ascent;//2
@@ -39,11 +42,14 @@ public:
     QScopedPointer<QLineEdit> d_descent_rate;//6
     QScopedPointer<QLineEdit> d_wind_from;//7
     QScopedPointer<QLineEdit> d_Wt;//8
+
     QScopedPointer<QComboBox> b_ask_for_integral_var;
+    QScopedPointer<QSlider> s_step;
 
 signals:
 
 public slots:
+    void ChangePrecision(int pos);
 };
 
 #endif // INPUTWIDGET_H

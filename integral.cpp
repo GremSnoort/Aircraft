@@ -24,9 +24,9 @@ long double Integral::Function(long double t, QString wind_function)
     return te_interp(wf.toStdString().c_str(), 0);
 }
 
-long double Integral::CalculateIntegral(long double a, long double b, int var, QString wind_function)
+long double Integral::CalculateIntegral(long double a, long double b, int var, double precision, QString wind_function)
 {
-    long double h = 0.001;// задаём шаг интегрирования!!!
+    long double h = precision;// задаём шаг интегрирования!!!
     long double n; // задаём число разбиений n
     n = (b - a) / h;
 

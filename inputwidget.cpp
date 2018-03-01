@@ -11,7 +11,9 @@ InputWidget::InputWidget(QWidget *parent)
     , l_descent_rate(new QLabel("6. Descent rate: ", this))
     , l_wind_from(new QLabel("7. Wind from: ", this))
     , l_Wt(new QLabel("W(t) = ", this))
+
     , l_ask_for_integral_var(new QLabel("How to integrate? ", this))
+    , l_step(new QLabel("Step of integrating: 0.1", this))
 
     , d_heading(new QLineEdit(this))
     , d_airspeed_on_ascent(new QLineEdit(this))
@@ -21,9 +23,18 @@ InputWidget::InputWidget(QWidget *parent)
     , d_descent_rate(new QLineEdit(this))
     , d_wind_from(new QLineEdit(this))
     , d_Wt(new QLineEdit(this))
+
     , b_ask_for_integral_var(new QComboBox(this))
+    , s_step(new QSlider(Qt::Horizontal, this))
 {
     CreateLayout();
+    connect(s_step.data(), &QSlider::sliderMoved, this, &InputWidget::ChangePrecision);
+}
+
+void InputWidget::ChangePrecision(int pos)
+{
+    double d = pos;
+    l_step.data()->setText(QString(tr("Step of integrating: %1").arg(d/10000)));
 }
 
 d_in InputWidget::GetInput(d_in in)
@@ -36,6 +47,8 @@ d_in InputWidget::GetInput(d_in in)
     in.descent_rate = d_descent_rate.data()->text().toFloat();
     in.wind_to = d_wind_from.data()->text().toFloat() + 180;
     in.wind_function = d_Wt.data()->text();
+    in.step = s_step.data()->value();
+    in.step/=10000;
 
     return in;
 }
@@ -78,6 +91,11 @@ void InputWidget::CreateLayout()
     b_ask_for_integral_var.data()->addItem("Formula of the central rectangles #1");
     b_ask_for_integral_var.data()->addItem("Trapezoid formula");
     b_ask_for_integral_var.data()->addItem("Formula of the central rectangles #2");
+
+    layout->addWidget(l_step.data(), 9, 0);
+    layout->addWidget(s_step.data(), 9, 1);
+    s_step.data()->setRange(1, 1000);
+    s_step.data()->setValue(10000);
 
     layout->addWidget(spacer);
 
