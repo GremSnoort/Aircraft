@@ -26,16 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    integral.cpp \
-    inputwidget.cpp \
-    outputwidget.cpp \    
-    tinyexpr-master/tinyexpr.c
+        integral.cpp \
+        inputwidget.cpp \
+        outputwidget.cpp \
+        tinyexpr-master/tinyexpr.c
 
 
 HEADERS += \
         mainwindow.h \
-    integral.h \
-    inputwidget.h \
-    outputwidget.h \    
-    tinyexpr-master/tinyexpr.h
+        integral.h \
+        inputwidget.h \
+        outputwidget.h \
+        tinyexpr-master/tinyexpr.h \
+        aircraftdatatypes.h
+
 

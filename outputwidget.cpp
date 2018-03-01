@@ -18,6 +18,28 @@ OutputWidget::OutputWidget(QWidget *parent)
     CreateLayout();
 }
 
+void OutputWidget::SetOutput(d_out out)
+{
+    l_UP_North_South.data()->setText(QString(tr("North-South UP: %1").arg(out.up_north_south)));
+    l_UP_East_West.data()->setText(QString(tr("East-West UP: %1").arg(out.up_east_west)));
+
+    l_fall_time.data()->setText(QString(tr("Fall time: %1").arg(out.fall_time)));
+
+    l_DOWN_North_South.data()->setText(QString(tr("North-South DOWN: %1").arg(out.down_north_south)));
+    l_DOWN_East_West.data()->setText(QString(tr("East-West DOWN: %1").arg(out.down_east_west)));
+
+    l_Integral.data()->setText(QString(tr("Integral: %1").arg(out.integral)));
+
+    l_WIND_North_South.data()->setText(QString(tr("North-South WIND: %1").arg(out.wind_north_south)));
+    l_WIND_East_West.data()->setText(QString(tr("East-West WIND: %1").arg(out.wind_east_west)));
+
+    l_FINAL_North_South.data()->setText(QString(tr("North-South FINAL: %1").arg(out.final_north_south)));
+    l_FINAL_East_West.data()->setText(QString(tr("East-West FINAL: %1").arg(out.final_east_west)));
+
+    l_ANSWER_value.data()->setText(QString(tr("ANSWER: %1").arg(out.value)));
+    l_ANSWER_destination.data()->setText(QString(tr("In Destination: %1 grad").arg(out.destination)));
+}
+
 void OutputWidget::CreateLayout()
 {
     QGridLayout* layout = new QGridLayout(this);
@@ -44,10 +66,19 @@ void OutputWidget::CreateLayout()
     layout->addWidget(new QWidget(), 7, 0);
     layout->addWidget(new QWidget(), 7, 1);
 
-    layout->addWidget(l_ANSWER_value.data(), 8, 0);
-    layout->addWidget(l_ANSWER_destination.data(), 9, 0);
+    layout->addWidget(l_ANSWER_value.data(), 9, 0);
+    layout->addWidget(l_ANSWER_destination.data(), 10, 0);
+
     l_ANSWER_value.data()->setStyleSheet("color : red; font: 75 14pt;");
     l_ANSWER_destination.data()->setStyleSheet("color : red; font: 75 14pt;");
+
+    QLabel *imagelabel = new QLabel(this);
+    imagelabel->setPixmap(QPixmap(QCoreApplication::applicationDirPath()+"/Pics/kompass.jpeg"));
+
+    layout->addWidget(imagelabel, 8, 1, 10, 1);
+    layout->setRowMinimumHeight(8, 500);
+    layout->setRowMinimumHeight(9, 500);
+    layout->setRowMinimumHeight(10, 500);
 
     layout->addWidget(spacer);
 

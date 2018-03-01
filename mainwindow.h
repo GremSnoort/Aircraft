@@ -19,19 +19,12 @@ public:
 
     void CreateLayout();
 
-    void SetParameters();
-
-    float heading = 0.0f;
-    float airspeed_on_ascent = 0.0f;
-    float ascent_rate = 0.0f;
-    float rise_time = 0.0f;
-    float airspeed_on_descent = 0.0f;
-    float descent_rate = 0.0f;
-    float wind_to = 0.0f;       
-
     QScopedPointer<InputWidget> input_;
     QScopedPointer<OutputWidget> output_;
-    QScopedPointer<QPushButton> calculate_res;    
+    QScopedPointer<QPushButton> calculate_res;
+
+    d_in in;
+    d_out out;
 
 public slots:
     void CalculateResult();

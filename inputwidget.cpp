@@ -11,6 +11,7 @@ InputWidget::InputWidget(QWidget *parent)
     , l_descent_rate(new QLabel("6. Descent rate: ", this))
     , l_wind_from(new QLabel("7. Wind from: ", this))
     , l_Wt(new QLabel("W(t) = ", this))
+    , l_ask_for_integral_var(new QLabel("How to integrate? ", this))
 
     , d_heading(new QLineEdit(this))
     , d_airspeed_on_ascent(new QLineEdit(this))
@@ -20,8 +21,23 @@ InputWidget::InputWidget(QWidget *parent)
     , d_descent_rate(new QLineEdit(this))
     , d_wind_from(new QLineEdit(this))
     , d_Wt(new QLineEdit(this))
+    , b_ask_for_integral_var(new QComboBox(this))
 {
     CreateLayout();
+}
+
+d_in InputWidget::GetInput(d_in in)
+{
+    in.heading = d_heading.data()->text().toFloat();
+    in.airspeed_on_ascent = d_airspeed_on_ascent.data()->text().toFloat();
+    in.ascent_rate = d_ascent_rate.data()->text().toFloat();
+    in.rise_time = d_rise_time.data()->text().toFloat();
+    in.airspeed_on_descent = d_airspeed_on_descent.data()->text().toFloat();
+    in.descent_rate = d_descent_rate.data()->text().toFloat();
+    in.wind_to = d_wind_from.data()->text().toFloat() + 180;
+    in.wind_function = d_Wt.data()->text();
+
+    return in;
 }
 
 void InputWidget::CreateLayout()
@@ -56,6 +72,12 @@ void InputWidget::CreateLayout()
 
     layout->addWidget(l_Wt.data(), 7, 0);
     layout->addWidget(d_Wt.data(), 7, 1);
+
+    layout->addWidget(l_ask_for_integral_var.data(), 8, 0);
+    layout->addWidget(b_ask_for_integral_var.data(), 8, 1);
+    b_ask_for_integral_var.data()->addItem("Formula of the central rectangles #1");
+    b_ask_for_integral_var.data()->addItem("Trapezoid formula");
+    b_ask_for_integral_var.data()->addItem("Formula of the central rectangles #2");
 
     layout->addWidget(spacer);
 

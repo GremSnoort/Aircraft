@@ -8,6 +8,10 @@
 #include <QLineEdit>
 #include <QGridLayout>
 
+#include "aircraftdatatypes.h"
+
+#include <QIcon>
+
 class OutputWidget : public QWidget
 {
     Q_OBJECT
@@ -15,6 +19,8 @@ public:
     explicit OutputWidget(QWidget *parent = nullptr);
 
     void CreateLayout();
+
+    void SetOutput(d_out out);
 
     QScopedPointer<QLabel> l_UP_North_South;
     QScopedPointer<QLabel> l_UP_East_West;
