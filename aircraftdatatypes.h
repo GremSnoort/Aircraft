@@ -25,12 +25,18 @@ struct d_out
 
     double up_north_south = 0.0f;
     double up_east_west = 0.0f;
+    double up_res = 0.0f;
+
     double fall_time = 0.0f;
+
     double down_north_south = 0.0f;
     double down_east_west = 0.0f;
+    double down_res = 0.0f;
+
     double integral = 0.0f;
     double wind_north_south = 0.0f;
     double wind_east_west = 0.0f;
+
     double final_north_south = 0.0f;
     double final_east_west = 0.0f;
 

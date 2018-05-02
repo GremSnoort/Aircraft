@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , output_(new OutputWidget(this))
     , calculate_res(new QPushButton("Calculate", this))    
 {    
-    setFixedSize(400, 590);
+    setFixedSize(400, 700);
     setWindowIcon(QIcon(QCoreApplication::applicationDirPath()+"/Pics/kompass.jpeg"));
     CreateLayout();
     connect(calculate_res.data(), &QPushButton::released, this, &MainWindow::CalculateResult);
@@ -19,14 +19,16 @@ void MainWindow::CalculateResult()
 {
     in = input_.data()->GetInput(in);
 
-    out.up_north_south = in.airspeed_on_ascent * in.rise_time * cos(in.heading*M_PI/180);
-    out.up_east_west = in.airspeed_on_ascent * in.rise_time * sin(in.heading*M_PI/180);
+    out.up_res = in.airspeed_on_ascent * in.rise_time;
+    out.up_north_south = out.up_res * cos(in.heading*M_PI/180);
+    out.up_east_west = out.up_res * sin(in.heading*M_PI/180);
 
     if(in.descent_rate!=0)
         out.fall_time = in.ascent_rate * in.rise_time / in.descent_rate;
 
-    out.down_north_south = in.airspeed_on_descent * out.fall_time * cos(in.heading*M_PI/180);
-    out.down_east_west = in.airspeed_on_descent * out.fall_time * sin(in.heading*M_PI/180);
+    out.down_res = in.airspeed_on_descent * out.fall_time;
+    out.down_north_south = out.down_res * cos(in.heading*M_PI/180);
+    out.down_east_west = out.down_res * sin(in.heading*M_PI/180);
 
     out.integral = Integral::CalculateIntegral(in.rise_time
                                                , in.rise_time + out.fall_time

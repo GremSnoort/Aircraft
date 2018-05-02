@@ -4,12 +4,18 @@ OutputWidget::OutputWidget(QWidget *parent)
     : QWidget(parent)
     , l_UP_North_South(new QLabel("North-South UP: -", this))
     , l_UP_East_West(new QLabel("East-West UP: -", this))
+    , l_UPr(new QLabel("UP result: -", this))
+
     , l_fall_time(new QLabel("Fall time: -", this))
+
     , l_DOWN_North_South(new QLabel("North-South DOWN: -", this))
     , l_DOWN_East_West(new QLabel("East-West DOWN: -", this))
+    , l_DOWNr(new QLabel("DOWN result: -", this))
+
     , l_Integral(new QLabel("Integral: - ", this))
     , l_WIND_North_South(new QLabel("North-South WIND: -", this))
     , l_WIND_East_West(new QLabel("East-West WIND: -", this))
+
     , l_FINAL_North_South(new QLabel("North-South FINAL: -", this))
     , l_FINAL_East_West(new QLabel("East-West FINAL: -", this))
     , l_ANSWER_value(new QLabel("ANSWER: -", this))
@@ -22,14 +28,15 @@ void OutputWidget::SetOutput(d_out out)
 {
     l_UP_North_South.data()->setText(QString(tr("North-South UP: %1").arg(out.up_north_south)));
     l_UP_East_West.data()->setText(QString(tr("East-West UP: %1").arg(out.up_east_west)));
+    l_UPr.data()->setText(QString(tr("UP result: %1").arg(out.up_res)));
 
     l_fall_time.data()->setText(QString(tr("Fall time: %1").arg(out.fall_time)));
 
     l_DOWN_North_South.data()->setText(QString(tr("North-South DOWN: %1").arg(out.down_north_south)));
     l_DOWN_East_West.data()->setText(QString(tr("East-West DOWN: %1").arg(out.down_east_west)));
+    l_DOWNr.data()->setText(QString(tr("DOWN result: %1").arg(out.down_res)));
 
     l_Integral.data()->setText(QString(tr("Integral: %1").arg(out.integral)));
-
     l_WIND_North_South.data()->setText(QString(tr("North-South WIND: %1").arg(out.wind_north_south)));
     l_WIND_East_West.data()->setText(QString(tr("East-West WIND: %1").arg(out.wind_east_west)));
 
@@ -47,22 +54,24 @@ void OutputWidget::CreateLayout()
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     layout->addWidget(l_UP_North_South.data(), 0, 0);
-    layout->addWidget(l_DOWN_North_South.data(), 1, 0);
-    layout->addWidget(l_WIND_North_South.data(), 2, 0);
+    layout->addWidget(l_UP_East_West.data(), 1, 0);
+    layout->addWidget(l_UPr.data(), 2, 0);
 
-    layout->addWidget(l_UP_East_West.data(), 0, 1);
+    layout->addWidget(l_DOWN_North_South.data(), 0, 1);
     layout->addWidget(l_DOWN_East_West.data(), 1, 1);
-    layout->addWidget(l_WIND_East_West.data(), 2, 1);
+    layout->addWidget(l_DOWNr.data(), 2, 1);
+
     layout->addWidget(new QWidget(), 3, 0);
     layout->addWidget(new QWidget(), 3, 1);
 
-    layout->addWidget(l_fall_time.data(), 4, 0);
-    layout->addWidget(l_Integral.data(), 4, 1);
-    layout->addWidget(new QWidget(), 5, 0);
-    layout->addWidget(new QWidget(), 5, 1);
+    layout->addWidget(l_WIND_North_South.data(), 4, 0);
+    layout->addWidget(l_WIND_East_West.data(), 5, 0);
+    layout->addWidget(l_Integral.data(), 6, 0);
 
-    layout->addWidget(l_FINAL_North_South.data(), 6, 0);
+    layout->addWidget(l_fall_time.data(), 4, 1);
+    layout->addWidget(l_FINAL_North_South.data(), 5, 1);
     layout->addWidget(l_FINAL_East_West.data(), 6, 1);
+
     layout->addWidget(new QWidget(), 7, 0);
     layout->addWidget(new QWidget(), 7, 1);
 

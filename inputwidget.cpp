@@ -101,12 +101,11 @@ void InputWidget::CreateLayout()
 
     setLayout(layout);
 
-    QValidator* validator = new QDoubleValidator(this);
-    d_heading.data()->setValidator(validator);
-    d_airspeed_on_ascent.data()->setValidator(validator);
-    d_ascent_rate.data()->setValidator(validator);
-    d_rise_time.data()->setValidator(validator);
-    d_airspeed_on_descent.data()->setValidator(validator);
-    d_descent_rate.data()->setValidator(validator);
-    d_wind_from.data()->setValidator(validator);
+    d_heading.data()->setValidator(new QRegExpValidator(QRegExp("\\d+.\\d+"), this));
+    d_airspeed_on_ascent.data()->setValidator(new QRegExpValidator(QRegExp("\\d+.d+"), this));
+    d_ascent_rate.data()->setValidator(new QRegExpValidator(QRegExp("\\d+.d+"), this));
+    d_rise_time.data()->setValidator(new QRegExpValidator(QRegExp("\\d+.d+"), this));
+    d_airspeed_on_descent.data()->setValidator(new QRegExpValidator(QRegExp("\\d+.d+"), this));
+    d_descent_rate.data()->setValidator(new QRegExpValidator(QRegExp("\\d+.d+"), this));
+    d_wind_from.data()->setValidator(new QRegExpValidator(QRegExp("\\d+.d+"), this));
 }
